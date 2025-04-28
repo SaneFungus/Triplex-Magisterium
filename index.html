@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplex Atanor - Interfejs Epistemiczny</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SIMPLEX ATANOR</h1>
+            <p class="subtitle">Interfejs Epistemicznej Transmutacji</p>
+        </header>
+
+        <section class="materia-prima">
+            <h2>MATERIA PRIMA</h2>
+            <textarea id="problem-input" placeholder="Wprowadź zagadnienie wymagające alchemicznej transmutacji..."></textarea>
+        </section>
+
+        <section class="forma-transmutacji">
+            <h2>FORMA TRANSMUTACJI</h2>
+            <div class="forma-cards">
+                <div class="forma-card active" data-forma="separatio">
+                    <div class="card-symbol"><i class="fas fa-mortar-pestle"></i></div>
+                    <h3>Separatio</h3>
+                    <p>Analityczny rozkład na fundamentalne elementy i procesy destylacji</p>
+                </div>
+                <div class="forma-card" data-forma="coagulatio">
+                    <div class="card-symbol"><i class="fas fa-hammer"></i></div>
+                    <h3>Coagulatio</h3>
+                    <p>Pragmatyczna translacja wglądów w konkretne działania i implementacje</p>
+                </div>
+                <div class="forma-card" data-forma="coniunctio">
+                    <div class="card-symbol"><i class="fas fa-yin-yang"></i></div>
+                    <h3>Coniunctio</h3>
+                    <p>Dialektyczna integracja przeciwieństw i synteza odrzuconych elementów</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="parametry-esencjalne collapsed">
+            <div class="parametry-header" id="parametry-toggle">
+                <h2>PARAMETRY ESENCJALNE</h2>
+                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="parametry-content">
+                <div class="parameter-group active" data-forma="separatio">
+                    <div class="parameter">
+                        <label for="separatio-depth">Głębia analizy:</label>
+                        <input type="range" id="separatio-depth" min="1" max="10" value="7">
+                        <span class="parameter-value">7/10</span>
+                    </div>
+                    <div class="parameter">
+                        <label>Perspektywy epistemiczne:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" checked> Ontologiczna</label>
+                            <label><input type="checkbox" checked> Epistemologiczna</label>
+                            <label><input type="checkbox"> Aksjologiczna</label>
+                            <label><input type="checkbox" checked> Pragmatyczna</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="parameter-group" data-forma="coagulatio">
+                    <div class="parameter">
+                        <label for="coagulatio-scope">Zakres temporalny:</label>
+                        <div class="option-group">
+                            <label><input type="radio" name="temporal-scope" checked> Krótkoterminowy</label>
+                            <label><input type="radio" name="temporal-scope"> Średnioterminowy</label>
+                            <label><input type="radio" name="temporal-scope"> Długoterminowy</label>
+                        </div>
+                    </div>
+                    <div class="parameter">
+                        <label for="coagulatio-level">Poziom systemowy:</label>
+                        <select id="coagulatio-level">
+                            <option>Indywidualny</option>
+                            <option selected>Interpersonalny</option>
+                            <option>Organizacyjny</option>
+                            <option>Społeczny</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="parameter-group" data-forma="coniunctio">
+                    <div class="parameter">
+                        <label for="coniunctio-tension">Napięcie dialektyczne:</label>
+                        <input type="range" id="coniunctio-tension" min="1" max="10" value="6">
+                        <span class="parameter-value">6/10</span>
+                    </div>
+                    <div class="parameter">
+                        <label>Typy syntezy:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" checked> Heglowska</label>
+                            <label><input type="checkbox"> Nietzscheańska</label>
+                            <label><input type="checkbox" checked> Kontrapunktowa</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="trans-parameters">
+                    <div class="parameter">
+                        <label for="recursion-level">Poziom rekursji metapoznawczej:</label>
+                        <div class="recursion-selector">
+                            <div class="recursion-circle" data-level="1"></div>
+                            <div class="recursion-circle" data-level="2"></div>
+                            <div class="recursion-circle active" data-level="3"></div>
+                            <div class="recursion-circle" data-level="4"></div>
+                            <div class="recursion-circle" data-level="5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="action-buttons">
+            <div class="status-indicator">
+                <span id="current-forma">Forma: Separatio (Analityczna)</span>
+            </div>
+            <div class="buttons">
+                <button id="preview-button">Podgląd</button>
+                <button id="transmute-button">Transmutuj</button>
+            </div>
+        </section>
+        
+        <div id="preview-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Podgląd Promptu</h2>
+                <div id="prompt-preview"></div>
+                <button id="copy-prompt">Kopiuj do schowka</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
