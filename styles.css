@@ -216,9 +216,10 @@ section {
 }
 
 .checkbox-group, .option-group {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 15px;
+    margin-top: 8px;
 }
 
 .checkbox-group label, .option-group label {
@@ -255,10 +256,21 @@ select {
     border: 1px solid #634b66;
     cursor: pointer;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8a8a8a;
+    font-size: 0.8rem;
+}
+
+.recursion-circle::after {
+    content: attr(data-level);
 }
 
 .recursion-circle.active {
     background-color: rgba(99, 75, 102, 0.5);
+    color: #d4af37;
+    border-color: #d4af37;
 }
 
 .trans-parameters {
@@ -373,6 +385,25 @@ button {
     background-color: #2d3a4d;
 }
 
+/* Tooltips for fire descriptions */
+.checkbox-group label {
+    position: relative;
+}
+
+.checkbox-group label:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -30px;
+    left: 0;
+    background-color: #1e2b45;
+    color: #e2e2e2;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    z-index: 10;
+    width: 200px;
+}
+
 /* Responsiveness */
 @media (max-width: 768px) {
     .forma-cards {
@@ -380,7 +411,7 @@ button {
     }
     
     .checkbox-group, .option-group {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 8px;
     }
     
