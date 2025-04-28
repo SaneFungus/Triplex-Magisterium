@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simplex Atanor - Interfejs Epistemiczny</title>
+    <title>Triplex Magisterium - Interfejs Epistemiczny</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>SIMPLEX ATANOR</h1>
+            <h1>TRIPLEX MAGISTERIUM</h1>
             <p class="subtitle">Interfejs Epistemicznej Transmutacji</p>
         </header>
 
@@ -20,22 +20,22 @@
         </section>
 
         <section class="forma-transmutacji">
-            <h2>FORMA TRANSMUTACJI</h2>
+            <h2>MAGISTERIA ALCHEMICZNE</h2>
             <div class="forma-cards">
                 <div class="forma-card active" data-forma="separatio">
                     <div class="card-symbol"><i class="fas fa-mortar-pestle"></i></div>
                     <h3>Separatio</h3>
-                    <p>Analityczny rozkład na fundamentalne elementy i procesy destylacji</p>
+                    <p>Nigredo - Analityczny rozkład na fundamentalne elementy i procesy destylacji</p>
                 </div>
                 <div class="forma-card" data-forma="coagulatio">
                     <div class="card-symbol"><i class="fas fa-hammer"></i></div>
                     <h3>Coagulatio</h3>
-                    <p>Pragmatyczna translacja wglądów w konkretne działania i implementacje</p>
+                    <p>Albedo - Pragmatyczna translacja wglądów w konkretne działania i implementacje</p>
                 </div>
                 <div class="forma-card" data-forma="coniunctio">
                     <div class="card-symbol"><i class="fas fa-yin-yang"></i></div>
                     <h3>Coniunctio</h3>
-                    <p>Dialektyczna integracja przeciwieństw i synteza odrzuconych elementów</p>
+                    <p>Rubedo - Dialektyczna integracja przeciwieństw i synteza odrzuconych elementów</p>
                 </div>
             </div>
         </section>
@@ -53,12 +53,15 @@
                         <span class="parameter-value">7/10</span>
                     </div>
                     <div class="parameter">
-                        <label>Perspektywy epistemiczne:</label>
+                        <label>Perspektywy epistemiczne (ognie analityczne):</label>
                         <div class="checkbox-group">
-                            <label><input type="checkbox" checked> Ontologiczna</label>
-                            <label><input type="checkbox" checked> Epistemologiczna</label>
-                            <label><input type="checkbox"> Aksjologiczna</label>
-                            <label><input type="checkbox" checked> Pragmatyczna</label>
+                            <label><input type="checkbox" name="fire" value="ontologiczna" checked> Ontologiczna</label>
+                            <label><input type="checkbox" name="fire" value="epistemologiczna" checked> Epistemologiczna</label>
+                            <label><input type="checkbox" name="fire" value="aksjologiczna" checked> Aksjologiczna</label>
+                            <label><input type="checkbox" name="fire" value="pragmatyczna" checked> Pragmatyczna</label>
+                            <label><input type="checkbox" name="fire" value="systemowa" checked> Systemowa</label>
+                            <label><input type="checkbox" name="fire" value="historyczna" checked> Historyczna</label>
+                            <label><input type="checkbox" name="fire" value="apofatyczna" checked> Apofatyczna</label>
                         </div>
                     </div>
                 </div>
@@ -67,18 +70,18 @@
                     <div class="parameter">
                         <label for="coagulatio-scope">Zakres temporalny:</label>
                         <div class="option-group">
-                            <label><input type="radio" name="temporal-scope" checked> Krótkoterminowy</label>
-                            <label><input type="radio" name="temporal-scope"> Średnioterminowy</label>
-                            <label><input type="radio" name="temporal-scope"> Długoterminowy</label>
+                            <label><input type="radio" name="temporal-scope" value="krotkoterminowy" checked> Krótkoterminowy</label>
+                            <label><input type="radio" name="temporal-scope" value="srednioterminowy"> Średnioterminowy</label>
+                            <label><input type="radio" name="temporal-scope" value="dlugoterminowy"> Długoterminowy</label>
                         </div>
                     </div>
                     <div class="parameter">
                         <label for="coagulatio-level">Poziom systemowy:</label>
                         <select id="coagulatio-level">
-                            <option>Indywidualny</option>
-                            <option selected>Interpersonalny</option>
-                            <option>Organizacyjny</option>
-                            <option>Społeczny</option>
+                            <option value="indywidualny">Indywidualny</option>
+                            <option value="interpersonalny" selected>Interpersonalny</option>
+                            <option value="organizacyjny">Organizacyjny</option>
+                            <option value="spoleczny">Społeczny</option>
                         </select>
                     </div>
                 </div>
@@ -92,9 +95,9 @@
                     <div class="parameter">
                         <label>Typy syntezy:</label>
                         <div class="checkbox-group">
-                            <label><input type="checkbox" checked> Heglowska</label>
-                            <label><input type="checkbox"> Nietzscheańska</label>
-                            <label><input type="checkbox" checked> Kontrapunktowa</label>
+                            <label><input type="checkbox" name="synthesis" value="heglowska" checked> Heglowska</label>
+                            <label><input type="checkbox" name="synthesis" value="nietzscheanska"> Nietzscheańska</label>
+                            <label><input type="checkbox" name="synthesis" value="kontrapunktowa" checked> Kontrapunktowa</label>
                         </div>
                     </div>
                 </div>
@@ -116,7 +119,7 @@
 
         <section class="action-buttons">
             <div class="status-indicator">
-                <span id="current-forma">Forma: Separatio (Analityczna)</span>
+                <span id="current-forma">Magisterium: Separatio (Nigredo)</span>
             </div>
             <div class="buttons">
                 <button id="preview-button">Podgląd</button>
