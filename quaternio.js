@@ -74,6 +74,16 @@ class QuaternioTransmutationis {
       this._updateLiminalSpaces("circulus")
     }
 
+    // Obsługa zwijania/rozwijania panelu Wymiaru Epistemicznego
+    const wymiarToggle = document.getElementById("wymiar-toggle")
+    const wymiarSection = document.querySelector(".epistemiczny-wymiar")
+
+    if (wymiarToggle && wymiarSection) {
+      wymiarToggle.addEventListener("click", function () {
+        wymiarSection.classList.toggle("collapsed")
+      })
+    }
+
     console.log("Quaternio Transmutationis zainicjalizowany.")
   }
 
@@ -634,82 +644,199 @@ class QuaternioTransmutationis {
  * Inicjalizacja i integracja z istniejącym systemem
  */
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("Quaternio: Inicjalizacja systemu")
+
   // Sprawdzenie czy główny skrypt Triplex Magisterium został załadowany
-  if (typeof generatePrompt === "undefined") {
-    console.error("Wymagany jest główny skrypt Triplex Magisterium.")
-    return
+  if (typeof window.generatePrompt === "undefined") {
+    console.error(
+      "Quaternio: Błąd - funkcja generatePrompt nie została znaleziona. Upewnij się, że script.js załadował się poprawnie."
+    )
+
+    // Próba awaryjnego pobrania funkcji generatePrompt w przypadku gdy nie jest w obiekcie window
+    if (typeof generatePrompt === "undefined") {
+      console.error(
+        "Quaternio: Funkcja generatePrompt jest całkowicie niedostępna."
+      )
+      return
+    } else {
+      console.log(
+        "Quaternio: Funkcja generatePrompt jest dostępna w zakresie lokalnym, ale nie globalnym."
+      )
+    }
+  } else {
+    console.log(
+      "Quaternio: Funkcja generatePrompt znaleziona w obiekcie window."
+    )
   }
 
   // Inicjalizacja systemu Quaternio
   const quaternio = new QuaternioTransmutationis()
   window.quaternio = quaternio // Ekspozycja do globalnego obiektu dla dostępu z konsoli
 
-  // Zapisanie oryginalnej funkcji generowania promptu
-  const originalGeneratePrompt = generatePrompt
+  // Obsługa zwijania/rozwijania panelu Wymiaru Epistemicznego
+  const wymiarToggle = document.getElementById("wymiar-toggle")
+  const wymiarSection = document.querySelector(".epistemiczny-wymiar")
 
-  // Nadpisanie funkcji generowania promptu
-  generatePrompt = function () {
-    // Pobranie oryginalnego promptu z Triplex Magisterium
-    const originalPrompt = originalGeneratePrompt()
-
-    // Rozszerzenie promptu o komponent Quaternio
-    const quaternioExtension = quaternio.generatePromptExtension()
-
-    // Zwrócenie połączonego promptu
-    return originalPrompt + "\n\n" + quaternioExtension
+  if (wymiarToggle && wymiarSection) {
+    console.log("Quaternio: Dodawanie obsługi zwijania/rozwijania panelu")
+    wymiarToggle.addEventListener("click", function () {
+      wymiarSection.classList.toggle("collapsed")
+      console.log(
+        "Quaternio: Panel został " +
+          (wymiarSection.classList.contains("collapsed")
+            ? "zwinięty"
+            : "rozwinięty")
+      )
+    })
+  } else {
+    console.error(
+      "Quaternio: Nie znaleziono elementów panelu wymiarów (wymiarToggle lub wymiarSection)"
+    )
   }
 
-  // Dodanie przycisku do panelu akcji
+  // Zapisanie oryginalnej funkcji generowania promptu
+  // Używamy try-catch, aby obsłużyć różne scenariusze dostępu do funkcji
+  try {
+    let originalGeneratePrompt
+
+    if (typeof window.generatePrompt !== "undefined") {
+      originalGeneratePrompt = window.generatePrompt
+      console.log(
+        "Quaternio: Zapisano referencję do globalnej funkcji generatePrompt"
+      )
+    } else {
+      originalGeneratePrompt = generatePrompt
+      console.log(
+        "Quaternio: Zapisano referencję do lokalnej funkcji generatePrompt"
+      )
+    }
+
+    // Nadpisanie funkcji generowania promptu - upewniamy się, że działamy w zakresie globalnym
+    window.generatePrompt = function () {
+      console.log("Quaternio: Wywołano zmodyfikowaną funkcję generatePrompt")
+
+      // Pobranie oryginalnego promptu z Triplex Magisterium
+      const originalPrompt = originalGeneratePrompt()
+      console.log("Quaternio: Oryginalny prompt został wygenerowany")
+
+      // Rozszerzenie promptu o komponent Quaternio
+      const quaternioExtension = quaternio.generatePromptExtension()
+      console.log("Quaternio: Wygenerowano rozszerzenie promptu")
+
+      // Zwrócenie połączonego promptu
+      const combinedPrompt = originalPrompt + "\n\n" + quaternioExtension
+      console.log("Quaternio: Połączono oryginał z rozszerzeniem")
+      return combinedPrompt
+    }
+
+    console.log("Quaternio: Funkcja generatePrompt została pomyślnie nadpisana")
+  } catch (error) {
+    console.error(
+      "Quaternio: Błąd podczas nadpisywania funkcji generatePrompt:",
+      error
+    )
+  }
+
+  // Dodanie przycisku do panelu akcji (jeśli nie istnieje)
   const actionButtons = document.querySelector(".buttons")
-  if (actionButtons) {
+  const existingButton = document.getElementById("advance-quaternio")
+
+  if (actionButtons && !existingButton) {
+    console.log("Quaternio: Dodawanie przycisku 'Następny Wymiar'")
     const advanceButton = document.createElement("button")
     advanceButton.id = "advance-quaternio"
     advanceButton.textContent = "Następny Wymiar"
     advanceButton.addEventListener("click", function () {
-      quaternio.advanceSequence()
+      const nextDimension = quaternio.advanceSequence()
+      console.log("Quaternio: Przejście do następnego wymiaru:", nextDimension)
     })
 
     actionButtons.appendChild(advanceButton)
+  } else if (!actionButtons) {
+    console.error("Quaternio: Nie znaleziono elementu .buttons")
+  } else {
+    console.log("Quaternio: Przycisk 'Następny Wymiar' już istnieje")
   }
 
-  // Dodanie wskaźnika statusu
+  // Dodanie wskaźnika statusu (jeśli nie istnieje)
   const actionSection = document.querySelector(".action-buttons")
-  if (actionSection) {
+  const existingStatus = document.getElementById("quaternio-status")
+
+  if (actionSection && !existingStatus) {
+    console.log("Quaternio: Dodawanie wskaźnika statusu")
     const statusIndicator = document.createElement("div")
     statusIndicator.id = "quaternio-status"
     statusIndicator.className = "quaternio-status"
     statusIndicator.textContent = "Quaternio Transmutationis gotowy"
 
     // Dodanie stylów
-    const style = document.createElement("style")
-    style.textContent = `
-      .quaternio-status {
-        margin-top: 10px;
-        padding: 8px;
-        background-color: rgba(22, 36, 71, 0.8);
-        border: 1px solid #9a7d0a;
-        border-radius: 3px;
-        color: #d4af37;
-        font-style: italic;
-        text-align: center;
-      }
-      
-      #advance-quaternio {
-        background-color: #2d3a4d;
-        color: #d4af37;
-        border: 1px solid #5b5b5b;
-      }
-      
-      #advance-quaternio:hover {
-        background-color: #3d4a5d;
-      }
-    `
-    document.head.appendChild(style)
+    if (!document.querySelector("style#quaternio-styles")) {
+      const style = document.createElement("style")
+      style.id = "quaternio-styles"
+      style.textContent = `
+        .quaternio-status {
+          margin-top: 10px;
+          padding: 8px;
+          background-color: rgba(22, 36, 71, 0.8);
+          border: 1px solid #9a7d0a;
+          border-radius: 3px;
+          color: #d4af37;
+          font-style: italic;
+          text-align: center;
+        }
+        
+        #advance-quaternio {
+          background-color: #2d3a4d;
+          color: #d4af37;
+          border: 1px solid #5b5b5b;
+        }
+        
+        #advance-quaternio:hover {
+          background-color: #3d4a5d;
+        }
+        
+        .wymiar-header {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+
+        .wymiar-content {
+          max-height: 1000px;
+          overflow: hidden;
+          transition: max-height 0.5s ease;
+        }
+
+        .epistemiczny-wymiar.collapsed .wymiar-content {
+          max-height: 0;
+        }
+      `
+      document.head.appendChild(style)
+      console.log("Quaternio: Dodano style CSS")
+    }
 
     actionSection.appendChild(statusIndicator)
+  } else if (!actionSection) {
+    console.error("Quaternio: Nie znaleziono elementu .action-buttons")
+  } else {
+    console.log("Quaternio: Wskaźnik statusu już istnieje")
   }
 
-  console.log(
-    "System Quaternio Transmutationis zintegrowany z Triplex Magisterium."
-  )
+  // Testowe wywołanie funkcji do sprawdzenia, czy jest poprawnie nadpisana
+  try {
+    console.log("Quaternio: Test - wywołanie funkcji generatePrompt()")
+    const testPrompt = window.generatePrompt()
+    console.log(
+      "Quaternio: Test udany - prompt zawiera rozszerzenie:",
+      testPrompt.includes("QUATERNIO TRANSMUTATIONIS")
+    )
+  } catch (error) {
+    console.error(
+      "Quaternio: Test funkcji generatePrompt nie powiódł się:",
+      error
+    )
+  }
+
+  console.log("Quaternio: System zintegrowany z Triplex Magisterium")
 })

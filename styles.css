@@ -508,3 +508,21 @@ button {
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
+
+.wymiar-content {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.epistemiczny-wymiar.collapsed .wymiar-content {
+  max-height: 0;
+}
+
+/* Dodaj styl dla nagłówka wymiarów */
+.wymiar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
