@@ -1,8 +1,2 @@
-**strona**
+### Strona z projektem:
 https://sanefungus.github.io/Triplex-Magisterium/
-
-???
-
-```
-halo
-```
