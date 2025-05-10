@@ -314,10 +314,11 @@ class QuaternioTransmutationis {
    * @public
    */
   generatePromptExtension() {
-    let extension = "## QUATERNIO TRANSMUTATIONIS\n\n"
+    let extension =
+      "***\n Mając to wszystko na uwadze, przepuść to przez:\n ## QUATERNIO TRANSMUTATIONIS\n\n"
 
     // Dodanie informacji o wybranym wymiarze
-    extension += `Aktywowano ${this._getDimensionLabel(
+    extension += `Aktywuj ${this._getDimensionLabel(
       this.state.activeDimension
     ).toUpperCase()} - `
 
