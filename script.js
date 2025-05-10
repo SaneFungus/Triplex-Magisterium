@@ -230,16 +230,41 @@ document.addEventListener("DOMContentLoaded", function () {
   // KLUCZOWA ZMIANA - udostępnij funkcję generatePrompt globalnie
   window.generatePrompt = generatePrompt
 
+  // Inicjalizacja obsługi panelu "Wymiar Epistemiczny"
+  const wymiarToggle = document.getElementById("wymiar-toggle")
+  const wymiarSection = document.querySelector(".epistemiczny-wymiar")
+
+  if (wymiarToggle && wymiarSection) {
+    wymiarToggle.addEventListener("click", function () {
+      wymiarSection.classList.toggle("collapsed")
+      console.log(
+        "Panel wymiarów został " +
+          (wymiarSection.classList.contains("collapsed")
+            ? "zwinięty"
+            : "rozwinięty")
+      )
+    })
+  }
+
+  // ZMIANA - używamy window.generatePrompt zamiast lokalnej funkcji generatePrompt
   // Preview button
   previewButton.addEventListener("click", function () {
-    const prompt = generatePrompt()
+    const promptFunction =
+      typeof window.generatePrompt === "function"
+        ? window.generatePrompt
+        : generatePrompt
+    const prompt = promptFunction()
     promptPreview.textContent = prompt
     previewModal.style.display = "block"
   })
 
   // Transmute button
   transmuteButton.addEventListener("click", function () {
-    const prompt = generatePrompt()
+    const promptFunction =
+      typeof window.generatePrompt === "function"
+        ? window.generatePrompt
+        : generatePrompt
+    const prompt = promptFunction()
     // W rzeczywistej aplikacji, ten prompt zostałby wysłany do API AI
     promptPreview.textContent = prompt
     previewModal.style.display = "block"
@@ -266,20 +291,4 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 2000)
     })
   })
-
-  // Inicjalizacja obsługi panelu "Wymiar Epistemiczny"
-  const wymiarToggle = document.getElementById("wymiar-toggle")
-  const wymiarSection = document.querySelector(".epistemiczny-wymiar")
-
-  if (wymiarToggle && wymiarSection) {
-    wymiarToggle.addEventListener("click", function () {
-      wymiarSection.classList.toggle("collapsed")
-      console.log(
-        "Panel wymiarów został " +
-          (wymiarSection.classList.contains("collapsed")
-            ? "zwinięty"
-            : "rozwinięty")
-      )
-    })
-  }
 })
