@@ -315,7 +315,7 @@ class QuaternioTransmutationis {
    */
   generatePromptExtension() {
     let extension =
-      "***\n Mając to wszystko na uwadze, przepuść to przez:\n ## QUATERNIO TRANSMUTATIONIS\n\n"
+      "***\n Mając na uwadze wcześniejsze rozważania, przepuść to przez:\n ## QUATERNIO TRANSMUTATIONIS\n\n"
 
     // Dodanie informacji o wybranym wymiarze
     extension += `Aktywuj ${this._getDimensionLabel(
@@ -665,17 +665,59 @@ document.addEventListener("DOMContentLoaded", function () {
     const originalPrompt = originalGeneratePrompt()
     console.log("Quaternio: Oryginalny prompt został wygenerowany")
 
-    // Rozszerzenie promptu o komponent Quaternio
-    const quaternioExtension = quaternio.generatePromptExtension()
-    console.log("Quaternio: Wygenerowano rozszerzenie promptu")
+    // Sprawdzenie czy dołączyć rozszerzenie Quaternio
+    const includeQuaternio =
+      document.getElementById("quaternio-toggle-checkbox") &&
+      document.getElementById("quaternio-toggle-checkbox").checked
 
-    // Zwrócenie połączonego promptu
-    const combinedPrompt = originalPrompt + "\n\n" + quaternioExtension
-    console.log("Quaternio: Połączono oryginał z rozszerzeniem")
-    return combinedPrompt
+    if (includeQuaternio) {
+      // Rozszerzenie promptu o komponent Quaternio
+      const quaternioExtension = quaternio.generatePromptExtension()
+      console.log("Quaternio: Wygenerowano rozszerzenie promptu")
+
+      // Zwrócenie połączonego promptu
+      const combinedPrompt = originalPrompt + "\n\n" + quaternioExtension
+      console.log("Quaternio: Połączono oryginał z rozszerzeniem")
+      return combinedPrompt
+    } else {
+      console.log("Quaternio: Prompt bez rozszerzenia Quaternio")
+      return originalPrompt
+    }
   }
 
   console.log("Quaternio: Funkcja generatePrompt została pomyślnie nadpisana")
+
+  // Quaternio toggle checkbox functionality
+  const quaternioToggleCheckbox = document.getElementById(
+    "quaternio-toggle-checkbox"
+  )
+  const epistemicznyWymiarSection = document.querySelector(
+    ".epistemiczny-wymiar"
+  )
+  const advanceQuaternioButton = document.getElementById("advance-quaternio")
+
+  if (
+    quaternioToggleCheckbox &&
+    epistemicznyWymiarSection &&
+    advanceQuaternioButton
+  ) {
+    // Initial state
+    if (!quaternioToggleCheckbox.checked) {
+      epistemicznyWymiarSection.style.display = "none"
+      advanceQuaternioButton.style.display = "none"
+    }
+
+    // Handle changes
+    quaternioToggleCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        epistemicznyWymiarSection.style.display = "block"
+        advanceQuaternioButton.style.display = "inline-block"
+      } else {
+        epistemicznyWymiarSection.style.display = "none"
+        advanceQuaternioButton.style.display = "none"
+      }
+    })
+  }
 
   // Obsługa przycisku "Następny Wymiar"
   const advanceButton = document.getElementById("advance-quaternio")
