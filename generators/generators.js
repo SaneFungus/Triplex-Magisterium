@@ -6,12 +6,10 @@
  * zaimportowania i dodania do obiektu generators.
  */
 
-// Import generatorów zrefaktoryzowanych używających nowej klasy bazowej
+// Import generatorów używających nowej klasy bazowej
 import { SeparatioGenerator } from "./separatio-refactored.js"
-// Import istniejących generatorów (wciąż do refaktoryzacji)
-import { CoagulatioGenerator } from "./coagulatio.js"
-import { ConiunctioGenerator } from "./coniunctio.js"
-// Import nowego generatora
+import { CoagulatioGenerator } from "./coagulatio-refactored.js"
+import { ConiunctioGenerator } from "./coniunctio-refactored.js"
 import { SublimationGenerator } from "./sublimatio.js"
 
 /**
