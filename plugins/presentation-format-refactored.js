@@ -302,7 +302,7 @@ Stwórz kompletny akademicki esej z tytułem, wstępem, tezą, rozwinięciem arg
 Stwórz oryginalny wiersz, który:
 - Wykorzystuje metafory i symbole do wyrażenia istoty tematu
 - Ma przemyślaną strukturę stroficzną
-- Stosuje środki poetyckie (rytm, rym, aliterację itp.)
+- Stosuje środki poetyckie (rytm, aliterację itp.)
 - Operuje obrazowaniem zmysłowym i konkretnym
 - Przekazuje głębię emocjonalną i intelektualną tematu`
         break
