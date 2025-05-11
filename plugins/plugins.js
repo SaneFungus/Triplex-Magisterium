@@ -1,9 +1,14 @@
 // Import przykładowego pluginu
-// import { StyleSelectorPlugin } from './examples/style-selector.js';
+// Importuj istniejące pluginy
+//import { StyleSelectorPlugin } from "./examples/style-selector.js"
+// Dodaj nowy import
+import { PresentationFormatPlugin } from "./presentation-format.js"
 
-// Rejestr pluginów (początkowo pusty)
+// Zaktualizuj rejestr pluginów
 export const plugins = {
-  // styleSelector: new StyleSelectorPlugin()
+  // styleSelector: new StyleSelectorPlugin(),
+  // Dodaj nowy plugin
+  presentationFormat: new PresentationFormatPlugin(),
 }
 
 // Metoda do rejestracji nowych pluginów
