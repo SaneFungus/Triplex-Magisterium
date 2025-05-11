@@ -247,43 +247,167 @@ export class PresentationFormatPlugin extends Plugin {
   }
 
   /**
-   * Generuje treść do dodania do promptu
-   * @return {string} Treść do dodania do promptu
-   * @override
-   */
-  generateContent() {
-    const formatData = this.app.getState(`pluginData.${this.id}`)
+ * Generuje treść do dodania do promptu
+ * @return {string} Treść do dodania do promptu
+ * @override
+ */
+generateContent() {
+  const formatData = this.app.getState(`pluginData.${this.id}`)
 
-    if (!formatData.enabled || formatData.selectedFormat === "default") {
-      return ""
-    }
-
-    let formatName = ""
-    let formatDescription = ""
-
-    if (formatData.selectedFormat === "custom") {
-      formatName = formatData.customFormat || "Format niestandardowy"
-      formatDescription = formatData.formatDescription
-    } else {
-      const format = this.formats.find(
-        (f) => f.id === formatData.selectedFormat
-      )
-      if (format) {
-        formatName = format.name
-        formatDescription = format.description
-      }
-    }
-
-    // Wygeneruj treść dla promptu
-    let content = `
-## Format Prezentacji
-
-Przedstaw wynikową treść w formie: **${formatName}**`
-
-    if (formatDescription) {
-      content += `\n\nCharakterystyka formy: ${formatDescription}`
-    }
-
-    return content
+  if (!formatData.enabled || formatData.selectedFormat === "default") {
+    return ""
   }
+
+  let formatName = ""
+  let formatDescription = ""
+
+  if (formatData.selectedFormat === "custom") {
+    formatName = formatData.customFormat || "Format niestandardowy"
+    formatDescription = formatData.formatDescription
+  } else {
+    const format = this.formats.find(
+      (f) => f.id === formatData.selectedFormat
+    )
+    if (format) {
+      formatName = format.name
+      formatDescription = format.description
+    }
+  }
+
+  // Wygeneruj rozbudowaną treść dla promptu
+  let content = `## Transformatio Formae
+
+Dokonaj transmutacji epistemicznej wyniku twoich rozważań poprzez zastosowanie Metamorphosis Expressionis - narzędzia translacji międzygatunkowej pozwalającego na rekontekstualizację treści poznawczych.
+
+1. FORMA EXPRESSIVA: **${formatName}**
+
+2. DECANTATIO STILISTICA: Przeprowadź procedurę destylacji stylistycznej, która zachowa esencję merytoryczną, jednocześnie transformując strukturę formalną wypowiedzi. Zastosuj następujące operacje:
+   * Ekstrakcja tropów i figur charakterystycznych dla docelowej formy wypowiedzi
+   * Adaptacja struktury argumentacyjnej do wymogów genologicznych
+   * Rekalibracja rejestru językowego przy zachowaniu precyzji epistemicznej
+   * Transpozycja elementów dyskursywnych na elementy właściwe dla docelowego gatunku
+
+3. ESSENTIA CONSERVATIO: Zachowaj nienaruszony substrat epistemiczny pierwotnej analizy przy jednoczesnej modyfikacji formy. Unikaj redukcji złożoności merytorycznej mimo zmiany konwencji ekspresyjnej.`
+
+  // Dodaj szczegółowe instrukcje w zależności od wybranego formatu
+  switch (formatData.selectedFormat) {
+    case "essay":
+      content += `
+
+4. STRUCTURA SPECIFICA: Zorganizuj treść według schematu:
+   * Wprowadzenie z wyraźnie zarysowaną tezą
+   * Korpus argumentacyjny z hierarchizacją dowodów
+   * Konkluzja syntetyzująca przedstawione perspektywy
+   * Bibliografia konceptualna (odniesienia do kluczowych koncepcji i tradycji)
+
+5. MODUS OPERANDI: Zastosuj tryb dyskursywny właściwy dla tradycji akademickiej, z naciskiem na:
+   * Precyzję terminologiczną
+   * Logiczną strukturę wywodu
+   * Adekwatne odwołania do istniejących tradycji i paradygmatów
+   * Wielopoziomową argumentację z antycypacją kontrargumentów`
+      break;
+    case "poem":
+      content += `
+
+4. ALCHEMIA POETICA: Przeprowadź proces sublimacji pojęciowej, transmutując:
+   * Abstrakcje teoretyczne w obrazy zmysłowe
+   * Struktury argumentacyjne w rytmiczne następstwa strof
+   * Terminy techniczne w metafory i symbole
+   * Wywód linearny w kompozycję polisemiczną
+
+5. QUINTESSENTIA IMAGINATIVA: Zachowaj istotę intelektualną tematu przy jednoczesnym uwolnieniu potencjału:
+   * Wieloznaczności semantycznej
+   * Konotacyjnego bogactwa języka
+   * Emotywnego rezonansu
+   * Sensualnej konkretności obrazowania`
+      break;
+    case "manifesto":
+      content += `
+
+4. PROCLAMATIO VIGOROSA: Wprowadź następujące transmutacje:
+   * Przekształcenie wywodu analitycznego w sekwencję deklaratywnych tez
+   * Wzmocnienie modalności poprzez użycie trybu imperatywnego
+   * Intensyfikacja kontrastu między afirmowanymi a odrzucanymi elementami
+   * Rytmizacja tekstu dla wzmocnienia efektu retorycznego
+
+5. IGNIS TRANSFORMATIVUS: Nasycenie tekstu elementami:
+   * Profetycznej wizyjności
+   * Radykalnego zerwania z paradygmatami
+   * Dyskursywnej bezkompromisowości
+   * Rewolucyjnej temporalności (przyszłość jako czas narracji)`
+      break;
+    case "student":
+      content += `
+
+4. CLARIFICATIO CONCEPTUUM: Zastosuj procedury:
+   * Dekompozycji złożonych terminów na komponenty zrozumiałe intuicyjnie
+   * Wprowadzenia przykładów ilustrujących abstrakcyjne koncepcje
+   * Progresywnego budowania złożoności (od elementarnego do zaawansowanego)
+   * Eksplicytnego objaśniania przejść między poziomami analizy
+
+5. STRUCTURA DIDACTICA: Zorganizuj treść jako:
+   * Sekwencję celów poznawczych
+   * Gradację trudności konceptualnej
+   * System wzajemnie powiązanych modułów wiedzy
+   * Dialektykę pytań i odpowiedzi`
+      break;
+    case "workshop":
+      content += `
+
+4. PRAXIS ORIENTATIO: Dokonaj transformacji:
+   * Teorii w sekwencję działań
+   * Pojęć w narzędzia
+   * Abstrakcji w materialne konkretyzacje
+   * Kontemplacji w interwencję
+
+5. INSTRUCTIO PROCEDURALIS: Przeformułuj treść jako:
+   * Chronologiczny ciąg jasno zdefiniowanych kroków
+   * Zestaw technik z określonymi parametrami wykonania
+   * Strukturę iteratywną z punktami decyzyjnymi
+   * System mierzalnych rezultatów i kryteriów oceny`
+      break;
+    case "critique":
+      content += `
+
+4. DIALECTICA NEGATIVA: Uruchom procedury:
+   * Systematycznej dekonstrukcji założeń
+   * Identyfikacji wewnętrznych sprzeczności
+   * Kontekstualizacji historycznej i ideologicznej
+   * Analizy implikowanych, lecz niewyrażonych konsekwencji
+
+5. HIERARCHIZATIO PERSPECTIVAE: Wprowadź meta-poziom analizy poprzez:
+   * Eksplicytne odniesienie do przyjętego kryterium wartościowania
+   * Zestawienie z alternatywnymi systemami oceny
+   * Rekonstrukcję genealogii krytykowanych elementów
+   * Propozycję alternatywnych trajektorii rozwoju`
+      break;
+    case "curatorial":
+      content += `
+
+4. CONTEXTUS EXPOSITIONIS: Stwórz ramę konceptualną poprzez:
+   * Usytuowanie treści w szerszej narracji kulturowej
+   * Wydobycie dialogu z tradycją i współczesnością
+   * Identyfikację momentów przełomowych i punktów węzłowych
+   * Uwypuklenie napięć i rezonansów między elementami
+
+5. DISPOSITIO SPATIALIA: Przeprowadź organizację treści jako:
+   * Konceptualną topografię do eksploracji
+   * Kompozycję z przemyślanymi sekwencjami i juxtapozycjami
+   * System wizualnych i pojęciowych dominant
+   * Strukturę umożliwiającą wielorakie ścieżki interpretacyjne`
+      break;
+  }
+
+  // Dodaj opis formatu własnego, jeśli został wybrany
+  if (formatData.selectedFormat === "custom" && formatDescription) {
+    content += `
+
+4. SPECIFICATIO PARTICULARIS: Zastosuj następującą charakterystykę formy:
+   ${formatDescription.split(".").map(sentence => `* ${sentence.trim()}`).filter(item => item.length > 2).join("\n   ")}
+
+5. TRANSMUTATIO COMPLETA: Dokonaj pełnej transformacji stylistyczno-gatunkowej przy zachowaniu integralności epistemicznej oryginalnego przekazu.`
+  }
+
+  return content
+}
 }
