@@ -6,7 +6,9 @@ class SimplexAtanorApp {
     this.state = {
       problem: "",
       activeGenerator: "separatio",
-      parameters: {},
+      parameters: {
+        recursionLevel: 3, // Dodanie domyślnej wartości dla poziomu rekursji
+      },
       pluginData: {},
     }
 
@@ -101,6 +103,7 @@ class SimplexAtanorApp {
         generator.id === this.state.activeGenerator ? "active" : ""
       }`
       paramGroup.setAttribute("data-generator", generator.id)
+      paramGroup.id = `${generator.id}-parameters`
 
       // Renderowanie parametrów
       const parameters = generator.renderParameters(this)
@@ -128,6 +131,13 @@ class SimplexAtanorApp {
       input.addEventListener("input", () => {
         this.state.parameters[generatorId][paramName] = parseInt(input.value)
         valueDisplay.textContent = `${input.value}/10`
+
+        // Emisja zdarzenia zmiany stanu
+        this.emit("state:changed", {
+          path: `parameters.${generatorId}.${paramName}`,
+          oldValue: this.state.parameters[generatorId][paramName],
+          newValue: parseInt(input.value),
+        })
       })
     })
 
@@ -157,11 +167,61 @@ class SimplexAtanorApp {
                   (val) => val !== paramValue
                 )
             }
+
+            // Emisja zdarzenia zmiany stanu
+            this.emit("state:changed", {
+              path: `parameters.${generatorId}.${paramName}`,
+              oldValue: this.state.parameters[generatorId][paramName],
+              newValue: this.state.parameters[generatorId][paramName],
+            })
           })
         }
       })
 
-    // Podobna implementacja dla innych typów kontrolek...
+    // NOWE: Konfiguracja kontrolek dla przycisków radio
+    containerElem.querySelectorAll('input[type="radio"]').forEach((input) => {
+      const paramName = input.getAttribute("data-param")
+      const paramValue = input.getAttribute("data-value")
+
+      // Ustawienie początkowego stanu
+      if (this.state.parameters[generatorId][paramName] === paramValue) {
+        input.checked = true
+      }
+
+      input.addEventListener("change", () => {
+        if (input.checked) {
+          const oldValue = this.state.parameters[generatorId][paramName]
+          this.state.parameters[generatorId][paramName] = paramValue
+
+          // Emisja zdarzenia zmiany stanu
+          this.emit("state:changed", {
+            path: `parameters.${generatorId}.${paramName}`,
+            oldValue: oldValue,
+            newValue: paramValue,
+          })
+        }
+      })
+    })
+
+    // NOWE: Konfiguracja kontrolek dla select
+    containerElem.querySelectorAll("select").forEach((select) => {
+      const paramName = select.getAttribute("data-param")
+
+      // Ustawienie początkowego stanu
+      select.value = this.state.parameters[generatorId][paramName]
+
+      select.addEventListener("change", () => {
+        const oldValue = this.state.parameters[generatorId][paramName]
+        this.state.parameters[generatorId][paramName] = select.value
+
+        // Emisja zdarzenia zmiany stanu
+        this.emit("state:changed", {
+          path: `parameters.${generatorId}.${paramName}`,
+          oldValue: oldValue,
+          newValue: select.value,
+        })
+      })
+    })
   }
 
   setupEventListeners() {
@@ -199,6 +259,37 @@ class SimplexAtanorApp {
         setTimeout(() => {
           button.textContent = "Kopiuj do schowka"
         }, 2000)
+      })
+    })
+
+    // NOWE: Obsługa przycisków rekursji metapoznawczej
+    document.querySelectorAll(".recursion-circle").forEach((circle) => {
+      const level = parseInt(circle.getAttribute("data-level"))
+
+      // Ustawienie początkowego stanu
+      if (level === this.state.parameters.recursionLevel) {
+        circle.classList.add("active")
+      }
+
+      circle.addEventListener("click", () => {
+        // Usunięcie klasy "active" ze wszystkich kółek
+        document.querySelectorAll(".recursion-circle").forEach((c) => {
+          c.classList.remove("active")
+        })
+
+        // Dodanie klasy "active" do klikniętego kółka
+        circle.classList.add("active")
+
+        // Aktualizacja stanu aplikacji
+        const oldValue = this.state.parameters.recursionLevel
+        this.setState("parameters.recursionLevel", level)
+
+        // Emisja zdarzenia zmiany stanu
+        this.emit("state:changed", {
+          path: "parameters.recursionLevel",
+          oldValue: oldValue,
+          newValue: level,
+        })
       })
     })
   }
@@ -309,7 +400,7 @@ class SimplexAtanorApp {
     }
 
     // Dodawanie sekcji rekursji jeśli potrzebne
-    const recursionLevel = this.getState("parameters.recursionLevel") || 3
+    const recursionLevel = this.getState("parameters.recursionLevel")
     if (recursionLevel > 1) {
       prompt += this.generateRecursionSection(recursionLevel)
     }
