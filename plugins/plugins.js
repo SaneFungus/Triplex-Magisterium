@@ -1,17 +1,30 @@
-// Import przykładowego pluginu
-// Importuj istniejące pluginy
-//import { StyleSelectorPlugin } from "./examples/style-selector.js"
-// Dodaj nowy import
-import { PresentationFormatPlugin } from "./presentation-format.js"
+/**
+ * Rejestr pluginów dla Simplex Atanor
+ *
+ * Ten plik służy jako centralny punkt rejestracji wszystkich dostępnych pluginów.
+ * Dzięki modularnej architekturze, dodawanie nowych pluginów wymaga jedynie ich
+ * zaimportowania i dodania do obiektu plugins.
+ */
 
-// Zaktualizuj rejestr pluginów
+// Import pluginów zrefaktoryzowanych używających nowej klasy bazowej
+import { PresentationFormatPlugin } from "./presentation-format-refactored.js"
+
+/**
+ * Rejestr wszystkich pluginów dostępnych w aplikacji
+ * Każdy klucz odpowiada identyfikatorowi pluginu
+ */
 export const plugins = {
-  // styleSelector: new StyleSelectorPlugin(),
-  // Dodaj nowy plugin
   presentationFormat: new PresentationFormatPlugin(),
 }
 
-// Metoda do rejestracji nowych pluginów
+/**
+ * Metoda umożliwiająca programatyczne rejestrowanie pluginów
+ * Przydatna dla zewnętrznych modułów i rozszerzeń
+ *
+ * @param {string} id - Unikalny identyfikator pluginu
+ * @param {Plugin} plugin - Instancja pluginu do zarejestrowania
+ * @return {Plugin} Zarejestrowany plugin
+ */
 export function registerPlugin(id, plugin) {
   if (plugins[id]) {
     console.warn(`Plugin o ID ${id} już istnieje i zostanie nadpisany.`)

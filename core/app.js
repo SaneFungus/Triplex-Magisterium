@@ -1,21 +1,38 @@
+/**
+ * Simplex Atanor - Główna klasa aplikacji
+ *
+ * Odpowiada za zarządzanie stanem aplikacji, obsługę zdarzeń i komunikację między komponentami.
+ * Stanowi centralny punkt aplikacji, integrujący generatory promptów i pluginy.
+ */
 import { generators } from "../generators/generators.js"
 import { plugins } from "../plugins/plugins.js"
 
 class SimplexAtanorApp {
+  /**
+   * Konstruktor aplikacji
+   * Inicjalizuje stan aplikacji i system zdarzeń
+   */
   constructor() {
+    // Inicjalizacja stanu aplikacji
     this.state = {
       problem: "",
       activeGenerator: "separatio",
       parameters: {
-        recursionLevel: 3, // Dodanie domyślnej wartości dla poziomu rekursji
+        recursionLevel: 3, // Domyślna wartość dla poziomu rekursji
       },
       pluginData: {},
     }
 
+    // Inicjalizacja systemu zdarzeń
     this.eventListeners = {}
+
+    // Uruchomienie inicjalizacji aplikacji
     this.initialize()
   }
 
+  /**
+   * Inicjalizuje aplikację, jej komponenty i interfejs użytkownika
+   */
   initialize() {
     // Inicjalizacja generatorów
     this.initializeGenerators()
@@ -30,11 +47,18 @@ class SimplexAtanorApp {
     this.emit("app:initialized")
   }
 
+  /**
+   * Inicjalizuje generatory promptów
+   * Dla każdego generatora ustawia domyślne parametry i inicjalizuje go
+   */
   initializeGenerators() {
     // Inicjalizacja podstawowych parametrów dla generatorów
     Object.values(generators).forEach((generator) => {
       if (!this.state.parameters[generator.id]) {
-        this.state.parameters[generator.id] = generator.getDefaultParameters()
+        // Wykorzystanie nowej metody getDefaultState() lub kompatybilności wstecznej
+        this.state.parameters[generator.id] = generator.getDefaultState
+          ? generator.getDefaultState()
+          : generator.getDefaultParameters()
       }
 
       generator.initialize(this)
@@ -46,6 +70,10 @@ class SimplexAtanorApp {
     }
   }
 
+  /**
+   * Inicjalizuje pluginy
+   * Dla każdego pluginu ustawia domyślny stan i inicjalizuje go
+   */
   initializePlugins() {
     // Inicjalizacja pluginów
     Object.values(plugins).forEach((plugin) => {
@@ -58,6 +86,10 @@ class SimplexAtanorApp {
     })
   }
 
+  /**
+   * Konfiguruje interfejs użytkownika
+   * Renderuje karty generatorów, panele parametrów i ustawia nasłuchiwanie zdarzeń
+   */
   setupUI() {
     // Konfiguracja elementów UI
     this.renderGeneratorCards()
@@ -65,6 +97,9 @@ class SimplexAtanorApp {
     this.setupEventListeners()
   }
 
+  /**
+   * Renderuje karty dla wszystkich generatorów
+   */
   renderGeneratorCards() {
     const container = document.getElementById("forma-container")
     container.innerHTML = ""
@@ -89,6 +124,10 @@ class SimplexAtanorApp {
     })
   }
 
+  /**
+   * Renderuje panele parametrów dla wszystkich generatorów
+   * Wykorzystuje nową metodę renderUI z klasy bazowej Generator
+   */
   renderParameterPanels() {
     const container = document.getElementById("parameters-container")
 
@@ -96,30 +135,61 @@ class SimplexAtanorApp {
     const existingGroups = container.querySelectorAll(".parameter-group")
     existingGroups.forEach((group) => group.remove())
 
+    // Usunięcie istniejących sekcji pluginów
+    const existingPluginSections = container.querySelectorAll(".plugin-section")
+    existingPluginSections.forEach((section) => section.remove())
+
     // Renderowanie paneli parametrów dla generatorów
     Object.values(generators).forEach((generator) => {
-      const paramGroup = document.createElement("div")
-      paramGroup.className = `parameter-group ${
-        generator.id === this.state.activeGenerator ? "active" : ""
-      }`
-      paramGroup.setAttribute("data-generator", generator.id)
-      paramGroup.id = `${generator.id}-parameters`
-
-      // Renderowanie parametrów
-      const parameters = generator.renderParameters(this)
-      paramGroup.innerHTML = parameters
-
-      // Dodawanie obsługi zdarzeń dla kontrolek parametrów
-      this.setupParameterControls(paramGroup, generator.id)
-
-      container.appendChild(paramGroup)
+      // Sprawdź, czy generator używa nowej klasy bazowej (ma metodę renderUI)
+      if (typeof generator.renderUI === "function") {
+        // Wykorzystanie nowej metody renderUI z klasy bazowej Generator
+        generator.renderUI(container)
+      } else {
+        // Kompatybilność wsteczna dla starszych generatorów
+        this._renderLegacyGeneratorParameters(generator, container)
+      }
     })
 
     // Umożliwienie pluginom dodawania własnych paneli
     this.emit("ui:parameters-rendered", container)
   }
 
-  setupParameterControls(containerElem, generatorId) {
+  /**
+   * Renderuje parametry dla generatorów używających starego interfejsu
+   * Metoda kompatybilności wstecznej
+   *
+   * @param {Object} generator - Generator do renderowania
+   * @param {HTMLElement} container - Kontener, do którego dodać parametry
+   * @private
+   */
+  _renderLegacyGeneratorParameters(generator, container) {
+    const paramGroup = document.createElement("div")
+    paramGroup.className = `parameter-group ${
+      generator.id === this.state.activeGenerator ? "active" : ""
+    }`
+    paramGroup.setAttribute("data-generator", generator.id)
+    paramGroup.id = `${generator.id}-parameters`
+
+    // Renderowanie parametrów
+    const parameters = generator.renderParameters(this)
+    paramGroup.innerHTML = parameters
+
+    // Dodawanie obsługi zdarzeń dla kontrolek parametrów
+    this._setupLegacyParameterControls(paramGroup, generator.id)
+
+    container.appendChild(paramGroup)
+  }
+
+  /**
+   * Konfiguruje kontrolki parametrów dla starszych generatorów
+   * Metoda kompatybilności wstecznej
+   *
+   * @param {HTMLElement} containerElem - Kontener z kontrolkami
+   * @param {string} generatorId - ID generatora
+   * @private
+   */
+  _setupLegacyParameterControls(containerElem, generatorId) {
     // Konfiguracja kontrolek dla suwaka
     containerElem.querySelectorAll('input[type="range"]').forEach((input) => {
       const valueDisplay = input.nextElementSibling
@@ -178,7 +248,7 @@ class SimplexAtanorApp {
         }
       })
 
-    // NOWE: Konfiguracja kontrolek dla przycisków radio
+    // Konfiguracja kontrolek dla przycisków radio
     containerElem.querySelectorAll('input[type="radio"]').forEach((input) => {
       const paramName = input.getAttribute("data-param")
       const paramValue = input.getAttribute("data-value")
@@ -203,7 +273,7 @@ class SimplexAtanorApp {
       })
     })
 
-    // NOWE: Konfiguracja kontrolek dla select
+    // Konfiguracja kontrolek dla select
     containerElem.querySelectorAll("select").forEach((select) => {
       const paramName = select.getAttribute("data-param")
 
@@ -224,6 +294,9 @@ class SimplexAtanorApp {
     })
   }
 
+  /**
+   * Konfiguruje nasłuchiwanie zdarzeń UI
+   */
   setupEventListeners() {
     // Obsługa przycisków
     document
@@ -262,7 +335,7 @@ class SimplexAtanorApp {
       })
     })
 
-    // NOWE: Obsługa przycisków rekursji metapoznawczej
+    // Obsługa przycisków rekursji metapoznawczej
     document.querySelectorAll(".recursion-circle").forEach((circle) => {
       const level = parseInt(circle.getAttribute("data-level"))
 
@@ -294,6 +367,10 @@ class SimplexAtanorApp {
     })
   }
 
+  /**
+   * Ustawia aktywny generator
+   * @param {string} generatorId - ID generatora do aktywacji
+   */
   setActiveGenerator(generatorId) {
     this.state.activeGenerator = generatorId
 
@@ -321,7 +398,12 @@ class SimplexAtanorApp {
     this.emit("generator:changed", generatorId)
   }
 
-  // System zdarzeń
+  /**
+   * Rejestruje nasłuchiwacz zdarzenia
+   * @param {string} event - Nazwa zdarzenia
+   * @param {Function} callback - Funkcja wywołania zwrotnego
+   * @return {Function} Funkcja do usunięcia nasłuchiwacza
+   */
   on(event, callback) {
     if (!this.eventListeners[event]) {
       this.eventListeners[event] = []
@@ -332,6 +414,11 @@ class SimplexAtanorApp {
     return () => this.off(event, callback)
   }
 
+  /**
+   * Usuwa nasłuchiwacz zdarzenia
+   * @param {string} event - Nazwa zdarzenia
+   * @param {Function} callback - Funkcja wywołania zwrotnego do usunięcia
+   */
   off(event, callback) {
     if (!this.eventListeners[event]) return
     this.eventListeners[event] = this.eventListeners[event].filter(
@@ -339,12 +426,21 @@ class SimplexAtanorApp {
     )
   }
 
+  /**
+   * Emituje zdarzenie do wszystkich zarejestrowanych nasłuchiwaczy
+   * @param {string} event - Nazwa zdarzenia
+   * @param {*} data - Dane przekazywane wraz ze zdarzeniem
+   */
   emit(event, data) {
     if (!this.eventListeners[event]) return
     this.eventListeners[event].forEach((callback) => callback(data))
   }
 
-  // Metody dostępu do stanu
+  /**
+   * Pobiera wartość ze stanu aplikacji na podstawie ścieżki
+   * @param {string} [path=null] - Ścieżka do wartości, kropką rozdzielone klucze
+   * @return {*} Wartość ze stanu aplikacji
+   */
   getState(path = null) {
     if (!path) return this.state
 
@@ -356,6 +452,12 @@ class SimplexAtanorApp {
       )
   }
 
+  /**
+   * Ustawia wartość w stanie aplikacji na podstawie ścieżki
+   * @param {string} path - Ścieżka do wartości, kropką rozdzielone klucze
+   * @param {*} value - Nowa wartość
+   * @return {boolean} Czy operacja się powiodła
+   */
   setState(path, value) {
     const parts = path.split(".")
     let current = this.state
@@ -375,16 +477,30 @@ class SimplexAtanorApp {
     return true
   }
 
-  // Generowanie promptu
+  /**
+   * Generuje prompt na podstawie aktywnego generatora i pluginów
+   * @return {string} Wygenerowany prompt
+   */
   generatePrompt() {
     const activeGenerator = generators[this.state.activeGenerator]
     if (!activeGenerator) return ""
 
     // Bazowy prompt od generatora
-    let prompt = activeGenerator.generatePrompt(
-      this.state.problem,
-      this.state.parameters[this.state.activeGenerator]
-    )
+    let prompt
+
+    // Sprawdź, czy generator używa nowej klasy bazowej (ma metodę generateContent)
+    if (typeof activeGenerator.generateContent === "function") {
+      prompt = activeGenerator.generateContent(
+        this.state.problem,
+        this.state.parameters[this.state.activeGenerator]
+      )
+    } else {
+      // Kompatybilność wsteczna dla starszych generatorów
+      prompt = activeGenerator.generatePrompt(
+        this.state.problem,
+        this.state.parameters[this.state.activeGenerator]
+      )
+    }
 
     // Zbieranie dodatkowych treści od pluginów
     const additionalContent = {}
@@ -408,6 +524,11 @@ class SimplexAtanorApp {
     return prompt
   }
 
+  /**
+   * Generuje sekcję rekursji metapoznawczej
+   * @param {number} level - Poziom rekursji
+   * @return {string} Fragment promptu z rekursją
+   */
   generateRecursionSection(level) {
     return `
 \nSPIRITUS RECTOR: Przeprowadź metarefleksję ${level}-go rzędu nad całością procesu poznawczego, uwzględniając:
@@ -419,12 +540,18 @@ class SimplexAtanorApp {
 `
   }
 
+  /**
+   * Wyświetla podgląd wygenerowanego promptu
+   */
   showPromptPreview() {
     const prompt = this.generatePrompt()
     document.getElementById("prompt-preview").textContent = prompt
     document.getElementById("preview-modal").style.display = "block"
   }
 
+  /**
+   * Generuje finalny prompt i wyświetla go
+   */
   generateFinalPrompt() {
     // Implementacja analogiczna do showPromptPreview
     this.showPromptPreview()
