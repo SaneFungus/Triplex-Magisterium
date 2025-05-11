@@ -1,142 +1,83 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simplex Atanor - Interfejs Epistemiczny</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>SIMPLEX ATANOR</h1>
-            <p class="subtitle">Interfejs Epistemicznej Transmutacji</p>
-        </header>
+      <header>
+        <h1>SIMPLEX ATANOR</h1>
+        <p class="subtitle">Interfejs Epistemicznej Transmutacji</p>
+      </header>
 
-        <section class="materia-prima">
-            <h2>MATERIA PRIMA</h2>
-            <textarea id="problem-input" placeholder="Wprowadź zagadnienie wymagające alchemicznej transmutacji..."></textarea>
-        </section>
+      <section class="materia-prima">
+        <h2>MATERIA PRIMA</h2>
+        <textarea
+          id="problem-input"
+          placeholder="Wprowadź zagadnienie wymagające alchemicznej transmutacji..."
+        ></textarea>
+      </section>
 
-        <section class="forma-transmutacji">
-            <h2>MAGISTERIA ALCHEMICZNE</h2>
-            <div class="forma-cards">
-                <div class="forma-card active" data-forma="separatio">
-                    <div class="card-symbol"><i class="fas fa-mortar-pestle"></i></div>
-                    <h3>Separatio</h3>
-                    <p>Nigredo/Albedo - Analityczny rozkład na fundamentalne elementy i procesy destylacji</p>
-                </div>
-                <div class="forma-card" data-forma="coagulatio">
-                    <div class="card-symbol"><i class="fas fa-hammer"></i></div>
-                    <h3>Coagulatio</h3>
-                    <p>Citrinias/Rubedo - Pragmatyczna translacja wglądów w konkretne działania i implementacje</p>
-                </div>
-                <div class="forma-card" data-forma="coniunctio">
-                    <div class="card-symbol"><i class="fas fa-yin-yang"></i></div>
-                    <h3>Coniunctio</h3>
-                    <p>Dialektyczna integracja przeciwieństw i synteza odrzuconych elementów</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="parametry-esencjalne collapsed">
-            <div class="parametry-header" id="parametry-toggle">
-                <h2>PARAMETRY ESENCJALNE</h2>
-                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="parametry-content">
-                <div class="parameter-group active" data-forma="separatio">
-                    <div class="parameter">
-                        <label for="separatio-depth">Głębia analizy:</label>
-                        <input type="range" id="separatio-depth" min="1" max="10" value="7">
-                        <span class="parameter-value">7/10</span>
-                    </div>
-                    <div class="parameter">
-                        <label>Perspektywy epistemiczne (ognie analityczne):</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="fire" value="ontologiczna" checked> Ontologiczna</label>
-                            <label><input type="checkbox" name="fire" value="epistemologiczna" checked> Epistemologiczna</label>
-                            <label><input type="checkbox" name="fire" value="aksjologiczna" checked> Aksjologiczna</label>
-                            <label><input type="checkbox" name="fire" value="pragmatyczna" checked> Pragmatyczna</label>
-                            <label><input type="checkbox" name="fire" value="systemowa" checked> Systemowa</label>
-                            <label><input type="checkbox" name="fire" value="historyczna" checked> Historyczna</label>
-                            <label><input type="checkbox" name="fire" value="apofatyczna" checked> Apofatyczna</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="parameter-group" data-forma="coagulatio">
-                    <div class="parameter">
-                        <label for="coagulatio-scope">Zakres temporalny:</label>
-                        <div class="option-group">
-                            <label><input type="radio" name="temporal-scope" value="krotkoterminowy" checked> Krótkoterminowy</label>
-                            <label><input type="radio" name="temporal-scope" value="srednioterminowy"> Średnioterminowy</label>
-                            <label><input type="radio" name="temporal-scope" value="dlugoterminowy"> Długoterminowy</label>
-                        </div>
-                    </div>
-                    <div class="parameter">
-                        <label for="coagulatio-level">Poziom systemowy:</label>
-                        <select id="coagulatio-level">
-                            <option value="indywidualny">Indywidualny</option>
-                            <option value="interpersonalny" selected>Interpersonalny</option>
-                            <option value="organizacyjny">Organizacyjny</option>
-                            <option value="spoleczny">Społeczny</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="parameter-group" data-forma="coniunctio">
-                    <div class="parameter">
-                        <label for="coniunctio-tension">Napięcie dialektyczne:</label>
-                        <input type="range" id="coniunctio-tension" min="1" max="10" value="6">
-                        <span class="parameter-value">6/10</span>
-                    </div>
-                    <div class="parameter">
-                        <label>Typy syntezy:</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="synthesis" value="heglowska" checked> Heglowska</label>
-                            <label><input type="checkbox" name="synthesis" value="nietzscheanska"> Nietzscheańska</label>
-                            <label><input type="checkbox" name="synthesis" value="kontrapunktowa" checked> Kontrapunktowa</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="trans-parameters">
-                    <div class="parameter">
-                        <label for="recursion-level">Poziom rekursji metapoznawczej:</label>
-                        <div class="recursion-selector">
-                            <div class="recursion-circle" data-level="1"></div>
-                            <div class="recursion-circle" data-level="2"></div>
-                            <div class="recursion-circle active" data-level="3"></div>
-                            <div class="recursion-circle" data-level="4"></div>
-                            <div class="recursion-circle" data-level="5"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="action-buttons">
-            <div class="status-indicator">
-                <span id="current-forma">Magisterium: Separatio (Nigredo)</span>
-            </div>
-            <div class="buttons">
-                <button id="preview-button">Podgląd</button>
-                <button id="transmute-button">Transmutuj</button>
-            </div>
-        </section>
-        
-        <div id="preview-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h2>Podgląd Promptu</h2>
-                <div id="prompt-preview"></div>
-                <button id="copy-prompt">Kopiuj do schowka</button>
-            </div>
+      <section class="forma-transmutacji">
+        <h2>MAGISTERIA ALCHEMICZNE</h2>
+        <div class="forma-cards" id="forma-container">
+          <!-- Generatory będą dodawane dynamicznie z JS -->
         </div>
+      </section>
+
+      <section class="parametry-esencjalne collapsed">
+        <div class="parametry-header" id="parametry-toggle">
+          <h2>PARAMETRY ESENCJALNE</h2>
+          <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+        </div>
+        <div class="parametry-content" id="parameters-container">
+          <!-- Parametry będą dodawane dynamicznie z JS -->
+
+          <div class="trans-parameters">
+            <div class="parameter">
+              <label for="recursion-level"
+                >Poziom rekursji metapoznawczej:</label
+              >
+              <div class="recursion-selector">
+                <div class="recursion-circle" data-level="1"></div>
+                <div class="recursion-circle" data-level="2"></div>
+                <div class="recursion-circle active" data-level="3"></div>
+                <div class="recursion-circle" data-level="4"></div>
+                <div class="recursion-circle" data-level="5"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="action-buttons">
+        <div class="status-indicator">
+          <span id="current-forma">Magisterium: Separatio (Nigredo)</span>
+        </div>
+        <div class="buttons">
+          <button id="preview-button">Podgląd</button>
+          <button id="transmute-button">Transmutuj</button>
+        </div>
+      </section>
+
+      <div id="preview-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-button">&times;</span>
+          <h2>Podgląd Promptu</h2>
+          <div id="prompt-preview"></div>
+          <button id="copy-prompt">Kopiuj do schowka</button>
+        </div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
+    <!-- Załadowanie głównego skryptu aplikacji jako modułu -->
+    <script type="module" src="core/app.js"></script>
+  </body>
 </html>
