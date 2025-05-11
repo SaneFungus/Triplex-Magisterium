@@ -1,0 +1,18 @@
+# Zależności
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Tymczasowe pliki
+.DS_Store
+Thumbs.db
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Katalogi kompilacji
+/dist
+/build

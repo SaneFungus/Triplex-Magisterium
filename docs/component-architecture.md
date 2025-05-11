@@ -17,6 +17,10 @@
    - [Implementacja pluginu](#implementacja-pluginu)
 7. [Migracja istniejących komponentów](#migracja-istniejących-komponentów)
 8. [Najlepsze praktyki](#najlepsze-praktyki)
+9. [Testowanie komponentów](#testowanie-komponentów)
+   - [Środowisko testowe](#środowisko-testowe)
+   - [Testy jednostkowe](#testy-jednostkowe)
+   - [Makiety obiektów](#makiety-obiektów)
 
 ## Wprowadzenie
 
@@ -48,6 +52,8 @@ BaseComponent (abstrakcyjna)
 └── Plugin (abstrakcyjna)
     └── PresentationFormatPlugin
 ```
+
+Wszystkie generatory promptów zostały już pomyślnie zrefaktoryzowane, aby dziedziczyły po klasie bazowej Generator. Każdy z nich zachowuje swoją unikalną funkcjonalność, jednocześnie korzystając z wspólnego interfejsu i funkcjonalności dostarczanych przez klasy bazowe.
 
 ### Relacje między klasami
 
@@ -283,15 +289,15 @@ export class CustomPlugin extends Plugin {
 
 ## Migracja istniejących komponentów
 
-Proces migracji istniejących komponentów do nowej architektury obejmuje:
+Proces migracji istniejących komponentów do nowej architektury został zakończony dla wszystkich generatorów. Migracja obejmowała następujące kroki:
 
-1. **Analiza istniejącego kodu** - zidentyfikowanie metod i właściwości do przeniesienia
+1. **Analiza istniejącego kodu** - identyfikacja metod i właściwości do przeniesienia
 2. **Dziedziczenie z odpowiedniej klasy bazowej** - Generator lub Plugin
 3. **Refaktoryzacja konstruktora** - przeniesienie inicjalizacji do parametrów konstruktora klasy bazowej
 4. **Dostosowanie metod** - dostosowanie istniejących metod do nowych interfejsów
 5. **Testowanie** - weryfikacja, czy komponenty działają identycznie jak przed migracją
 
-Aplikacja zawiera mechanizmy kompatybilności wstecznej, które umożliwiają stopniową migrację bez konieczności natychmiastowej refaktoryzacji wszystkich komponentów.
+Zrefaktoryzowane komponenty zostały pomyślnie przetestowane i zintegrowane z aplikacją, zachowując pełną kompatybilność funkcjonalną.
 
 ## Najlepsze praktyki
 
@@ -322,3 +328,56 @@ Aplikacja zawiera mechanizmy kompatybilności wstecznej, które umożliwiają st
 2. **Czyszczenie** - upewnij się, że wszystkie nasłuchiwacze są usuwane w metodzie `destroy()`
 3. **Konwencje nazewnictwa** - używaj formatu `kategoria:akcja` dla nazw zdarzeń
 4. **Zasięg** - emituj tylko zdarzenia niezbędne do funkcjonowania aplikacji
+
+## Testowanie komponentów
+
+Architektura komponentów została uzupełniona o kompletny system testów jednostkowych, umożliwiający weryfikację poprawności implementacji.
+
+### Środowisko testowe
+
+Dla testowania komponentów utworzono dedykowane środowisko testowe, które symuluje rzeczywiste środowisko aplikacji bez potrzeby faktycznego renderowania w przeglądarce:
+
+```javascript
+export function createTestEnvironment(generator) {
+  // Utworzenie instancji aplikacji
+  const app = new MockSimplexApp();
+  
+  // Dodanie domyślnych parametrów generatora do stanu aplikacji
+  const defaultParams = generator.getDefaultParameters();
+  app.state.parameters[generator.id] = defaultParams;
+  
+  // Inicjalizacja generatora z makietą aplikacji
+  generator.initialize(app);
+  
+  // Zwrócenie środowiska testowego
+  return {
+    app,
+    generator,
+    createElement: () => new MockElement(),
+    getElementById: (id) => { /* ... */ },
+    querySelectorAll: (selector) => { /* ... */ },
+    simulateEvent: (element, eventName, eventData) => { /* ... */ }
+  };
+}
+```
+
+### Testy jednostkowe
+
+Dla każdego generatora zdefiniowano komplet testów jednostkowych sprawdzających poprawność implementacji:
+
+1. **Testy dziedziczenia** - sprawdzanie poprawnej hierarchii klas
+2. **Testy właściwości** - weryfikacja poprawności podstawowych właściwości
+3. **Testy parametrów** - sprawdzanie domyślnych parametrów
+4. **Testy renderowania** - weryfikacja poprawności renderowania UI
+5. **Testy logiki biznesowej** - sprawdzanie poprawności generowania promptów
+6. **Testy zdarzeń** - testowanie reakcji na zdarzenia systemowe
+
+### Makiety obiektów
+
+Do testowania komponentów wykorzystywane są specjalne makiety (mock objects) symulujące rzeczywiste obiekty aplikacji:
+
+1. **MockElement** - symulacja elementów DOM z metodami takimi jak appendChild, setAttribute, itd.
+2. **MockSimplexApp** - symulacja głównej aplikacji z metodami getState, setState oraz systemem zdarzeń
+3. **Dodatkowe narzędzia** - funkcje pomocnicze do symulacji zdarzeń i interakcji z UI
+
+Dzięki tym makietom możliwe jest testowanie komponentów w izolowanym środowisku, co zwiększa niezawodność i powtarzalność testów.

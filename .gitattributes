@@ -1,0 +1,17 @@
+# Ustaw domyślną strategię dla wszystkich plików
+* text=auto
+
+# Wyraźnie zdefiniuj typy plików
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.json  text eol=lf
+*.html  text eol=lf
+*.css   text eol=lf
+*.md    text eol=lf
+
+# Pliki binarne
+*.png   binary
+*.jpg   binary
+*.gif   binary
